@@ -4,18 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:loginpage/screens/updateForm.dart';
 import '../functions/EditPage.dart';
+import '../functions/salesedit.dart';
 import '../main.dart';
 import '../widget/searchBar.dart';
 
-final GlobalKey<_InventoryPageState> myWidgetKey =
-    GlobalKey<_InventoryPageState>();
+final GlobalKey<_SalesInfoState> myWidgetKey = GlobalKey<_SalesInfoState>();
 
-class InventoryPage extends StatefulWidget {
+class SalesInfo extends StatefulWidget {
   @override
-  _InventoryPageState createState() => _InventoryPageState();
+  _SalesInfoState createState() => _SalesInfoState();
 }
 
-class _InventoryPageState extends State<InventoryPage> {
+class _SalesInfoState extends State<SalesInfo> {
   List<Map<String, dynamic>> _inventoryData = [];
   List<Map<String, dynamic>> _filteredInventoryData = [];
   String searchQuery = '';
@@ -24,7 +24,7 @@ class _InventoryPageState extends State<InventoryPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => EditPage(item: item),
+        builder: (context) => SalesEdit(item: item),
       ),
     ).then((value) {
       if (value == true) {
@@ -42,7 +42,7 @@ class _InventoryPageState extends State<InventoryPage> {
 
     try {
       final response = await Dio().post(
-        '$url/delete_inventory/',
+        '$url/delete_sale/',
         data: {
           'id': item['id'], // Assuming there is an 'id' field in the item data
         },
@@ -76,7 +76,7 @@ class _InventoryPageState extends State<InventoryPage> {
 
     try {
       final response = await Dio().get(
-        '$url/get_inventory',
+        '$url/sales_list',
         queryParameters: {
           "organization": session['userdata']['organization'],
         },
@@ -106,7 +106,7 @@ class _InventoryPageState extends State<InventoryPage> {
                   .toLowerCase()
                   .contains(searchQuery.toLowerCase()) ||
               item['size'].toLowerCase().contains(searchQuery.toLowerCase()) ||
-              item['suppliers']
+              item['customername']
                   .toLowerCase()
                   .contains(searchQuery.toLowerCase()) ||
               item['productname']
@@ -123,7 +123,7 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
   @override
-  void didUpdateWidget(covariant InventoryPage oldWidget) {
+  void didUpdateWidget(covariant SalesInfo oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (_inventoryData.isEmpty) {
       fetchInventoryData();
@@ -135,7 +135,7 @@ class _InventoryPageState extends State<InventoryPage> {
     double w = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inventory'),
+        title: Text('Sales Record'),
         backgroundColor: Colors.purple[300],
         centerTitle: true,
       ),
@@ -168,51 +168,35 @@ class _InventoryPageState extends State<InventoryPage> {
                           ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return UpdateForm();
-                            },
-                          ).then((value) {
-                            if (value == true) {
-                              fetchInventoryData();
-                            }
-                          });
-                        },
-                        child: const Text(
-                          'Add Items',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      ),
                     ],
                   ),
                 ),
                 SingleChildScrollView(
                   child: DataTable(
                     columns: [
+                      DataColumn(label: Text('Customer Name')),
                       DataColumn(label: Text('Company')),
-                      DataColumn(label: Text('Suppliers')),
                       DataColumn(label: Text('Product Name')),
                       DataColumn(label: Text('Size')),
                       DataColumn(label: Text('Cost Price')),
                       DataColumn(label: Text('Selling Price')),
                       DataColumn(label: Text('Discount')),
                       DataColumn(label: Text('Quantity')),
+                      DataColumn(label: Text('Date')),
                       if (session['userdata']['accounttype'] == "Admin")
                         DataColumn(label: Text('Actions')),
                     ],
                     rows: _filteredInventoryData.map((item) {
                       return DataRow(cells: [
+                        DataCell(Text(item['customername'])),
                         DataCell(Text(item['company'])),
-                        DataCell(Text(item['suppliers'])),
                         DataCell(Text(item['productname'])),
                         DataCell(Text(item['size'].toString())),
                         DataCell(Text(item['cp'].toString())),
                         DataCell(Text(item['sp'].toString())),
                         DataCell(Text(item['discount'].toString())),
                         DataCell(Text(item['quantity'].toString())),
+                        DataCell(Text(item['created_at'].toString())),
                         if (session['userdata']['accounttype'] == "Admin")
                           DataCell(
                             Row(

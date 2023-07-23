@@ -3,13 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../screens/updateForm.dart';
 
-class SearchBar extends StatefulWidget {
-  @override
-  _SearchBarState createState() => _SearchBarState();
-}
-
-class _SearchBarState extends State<SearchBar> {
-  final TextEditingController _searchController = TextEditingController();
+class SearchBarr extends StatelessWidget {
+  const SearchBarr({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,27 +15,34 @@ class _SearchBarState extends State<SearchBar> {
           padding: EdgeInsets.all(8),
           child: Row(
             children: [
-              Expanded(
-                child: TextField(
-
-                  controller: _searchController,
-                  decoration: const InputDecoration(
-                    hintText: 'Search',
-                    border: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.black)),
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.search),
-                onPressed: () {
-                  // Perform search action here
-                },
-              ),
-              TextButton(onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  UpdateForm(),));
-              }, child: const Text('Add Items', style: TextStyle(color: Colors.black),)),
-
+              // Expanded(
+              //   child: TextField(
+              //     // controller: _searchController,
+              //     decoration: const InputDecoration(
+              //       hintText: 'Search',
+              //       border: OutlineInputBorder(
+              //           borderSide: BorderSide(color: Colors.black)),
+              //     ),
+              //   ),
+              // ),
+              // IconButton(
+              //   icon: const Icon(Icons.search),
+              //   onPressed: () {
+              //     // Perform search action here
+              //   },
+              // ),
+              TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UpdateForm(),
+                        ));
+                  },
+                  child: const Text(
+                    'Add Items',
+                    style: TextStyle(color: Colors.black),
+                  )),
             ],
           ),
         ),

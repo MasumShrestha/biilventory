@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:loginpage/screens/home.dart';
 import 'package:loginpage/screens/newsignin.dart';
-import 'package:loginpage/screens/newsignup.dart';
-import 'package:loginpage/screens/signin.dart';
-import 'package:loginpage/screens/signup.dart';
+
 // import 'package:loginpage/screens/signin.dart';
+String url = 'http://192.168.1.72:8000';
+// String url='http://127.0.0.1:8000 ';
+
+late Map<String, dynamic> session;
 
 void main() {
   runApp(const MyApp());
@@ -22,7 +23,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-
       home: NewSignIn(),
     );
   }

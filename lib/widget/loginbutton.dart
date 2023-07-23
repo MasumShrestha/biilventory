@@ -1,5 +1,7 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import '../screens/home.dart';
+import 'package:loginpage/main.dart';
 
 
 class LoginButton extends StatelessWidget {
@@ -13,8 +15,11 @@ class LoginButton extends StatelessWidget {
       decoration: BoxDecoration(
           color: Colors.purple[300], borderRadius: BorderRadius.circular(15)),
       child: ElevatedButton(
-        onPressed: () {
+        onPressed: () async{
           if (formKey.currentState!.validate()) {
+            Dio dio=Dio();
+            final response= await dio.get("$url/signin");
+            print("response.data");
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => HomePage()),

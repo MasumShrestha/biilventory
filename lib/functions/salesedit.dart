@@ -4,64 +4,69 @@ import 'package:flutter/material.dart';
 
 import '../main.dart';
 
-class EditPage extends StatefulWidget {
+class SalesEdit extends StatefulWidget {
   final Map<String, dynamic> item;
 
-  const EditPage({Key? key, required this.item}) : super(key: key);
+  const SalesEdit({Key? key, required this.item}) : super(key: key);
 
   @override
-  _EditPageState createState() => _EditPageState();
+  _SalesEditState createState() => _SalesEditState();
 }
 
-class _EditPageState extends State<EditPage> {
+class _SalesEditState extends State<SalesEdit> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _companyController = TextEditingController();
-  final TextEditingController _suppliersController = TextEditingController();
+  final TextEditingController _customernameController = TextEditingController();
   final TextEditingController _productNameController = TextEditingController();
   final TextEditingController _sizeController = TextEditingController();
   final TextEditingController _cpController = TextEditingController();
   final TextEditingController _spController = TextEditingController();
   final TextEditingController _discountController = TextEditingController();
   final TextEditingController _quantityController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
     // Set initial values in the text fields based on the item data
     _companyController.text = widget.item['company'];
-    _suppliersController.text = widget.item['suppliers'];
+    _customernameController.text = widget.item['customername'];
     _productNameController.text = widget.item['productname'];
     _sizeController.text = widget.item['size'].toString();
     _cpController.text = widget.item['cp'].toString();
     _spController.text = widget.item['sp'].toString();
     _discountController.text = widget.item['discount'].toString();
     _quantityController.text = widget.item['quantity'].toString();
+    _dateController.text = widget.item['created_at'].toString();
+
     print(widget.item);
   }
 
   void updateItem() {
     if (_formKey.currentState!.validate()) {
       final company = _companyController.text;
-      final suppliers = _suppliersController.text;
+      final customername = _customernameController.text;
       final productname = _productNameController.text;
       final size = _sizeController.text;
       final cp = _cpController.text;
       final sp = _spController.text;
       final discount = _discountController.text;
       final quantity = _quantityController.text;
+      final created_at = _dateController.text;
       final organization = session['userdata']['organization'];
 
       Dio dio = Dio();
-      dio.post('$url/updateInventory/', data: {
+      dio.post('$url/updateSale/', data: {
         'organization': organization,
         'company': company,
-        'suppliers': suppliers,
+        'customername': customername,
         'productname': productname,
         'size': size,
         'sp': sp,
         'cp': cp,
         'discount': discount,
         'quantity': quantity,
+        'created_at': created_at,
         "id": widget.item['id'],
       });
 
@@ -97,11 +102,11 @@ class _EditPageState extends State<EditPage> {
                   },
                 ),
                 TextFormField(
-                  controller: _suppliersController,
-                  decoration: InputDecoration(labelText: 'Suppliers'),
+                  controller: _customernameController,
+                  decoration: InputDecoration(labelText: 'customername'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter suppliers';
+                      return 'Please enter customername';
                     }
                     return null;
                   },
